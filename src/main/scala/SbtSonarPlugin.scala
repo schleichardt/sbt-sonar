@@ -10,15 +10,19 @@ object SbtSonarPlugin extends Plugin {
 
   val sonarProperties = SettingKey[Map[String, String]]("sonar-properties", "The used properties to configure sonar, see http://docs.codehaus.org/display/SONAR/Analysis+Parameters.")
 
-  override lazy val settings = Seq(generateSonarPropertiesFile <<= (sonarProperties) map { (properties) =>
-    println("props: " + properties.mkString("\n"))
+  override lazy val settings = Seq(generateSonarPropertiesFile <<= (sonarProperties, target) map { (p, targetFolder) =>
+    println("running plugin code")
+    val propertiesAsString = p.toSeq.map { case (k, v) => "%s=%s".format(k, v) }.mkString("\n")
+    val propertiesFile = targetFolder / "sonar-project.properties"
+    println("propertiesFile" + propertiesFile)
+    IO.write(propertiesFile, propertiesAsString)
   }, sonarProperties <<= (version, organization, name, unmanagedSourceDirectories in Compile) { (v, org, n, sourceDirs) =>
     Map(
       "sonar.host.url" -> "http://localhost:9000",
-      "sonar.projectKey" -> s"$org:$n",
+      "sonar.projectKey" -> "%s:%s".format(org, n),
       "sonar.projectName" -> n,
       "sonar.projectVersion" -> v,
-      "sonar.sources" -> sourceDirs.map(_.getAbsolutePath).mkString(",")
+      "sonar.sources" -> sourceDirs.filter(_.exists).map(_.getAbsolutePath).mkString(",")
     )
   }
   )
