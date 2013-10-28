@@ -80,7 +80,7 @@ sbtrelease.ReleasePlugin.ReleaseKeys.releaseProcess := Seq[ReleaseStep](
     tagRelease,
     publishArtifacts.copy(action = { st: State =>
         import scala.sys.process._
-        if("./sbt-cross.sh publishSigned".! != 0)
+        if("./sbt-cross.sh publish-signed".! != 0)
           throw new java.io.IOException("could not publish artifacts.")
         st
     }),
