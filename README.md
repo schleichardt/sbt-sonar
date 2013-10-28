@@ -30,11 +30,13 @@ sbt gen-sonar-prop && cd target && sonar-runner
 
 #### 0.13.0:
 
-```scala sonarProperties := sonarProperties.value ++ Map("sonar.projectName" -> "override-name", "new.key" -> "new.value")```
+```scala sonarProperties := sonarProperties.value ++ Map("sonar.projectName" -> "override-name", 
+"new.key" -> "new.value")```
 
 #### Older SBT
 
-```scala sonarProperties ~= { old => old ++ Map("sonar.projectName" -> "override-name", "new.key" -> "new.value") }```
+```scala sonarProperties ~= { old => old ++ Map("sonar.projectName" -> "override-name", 
+"new.key" -> "new.value") }```
 
 
 
