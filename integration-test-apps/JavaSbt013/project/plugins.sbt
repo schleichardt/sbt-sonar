@@ -1,1 +1,1 @@
-addSbtPlugin("info.schleichardt" % "sbt-sonar" % "0.1.0-SNAPSHOT")
+addSbtPlugin("info.schleichardt" % "sbt-sonar" % "0.2.0-SNAPSHOT")

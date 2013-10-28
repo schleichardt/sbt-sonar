@@ -20,7 +20,7 @@ object SbtSonarPlugin extends Plugin {
       "sonar.projectKey" -> "%s:%s".format(org, n),
       "sonar.projectName" -> n,
       "sonar.projectVersion" -> v,
-      "sonar.sources" -> sourceDirs.filter(_.exists).map(_.getAbsolutePath).mkString(",")
+      "sonar.sources" -> sourceDirs.filter(_.exists).map(_.getAbsolutePath).toSet.mkString(",")
     )
   }
   )

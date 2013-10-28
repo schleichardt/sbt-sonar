@@ -1,0 +1,1 @@
+./sbt-cross.sh publish-signed
