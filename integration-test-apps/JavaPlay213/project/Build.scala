@@ -1,6 +1,10 @@
 import sbt._
 import Keys._
 import play.Project._
+import de.johoop.jacoco4sbt._
+import JacocoPlugin._
+import info.schleichardt.sbt.sonar.SbtSonarPlugin._
+
 
 object ApplicationBuild extends Build {
 
@@ -14,8 +18,7 @@ object ApplicationBuild extends Build {
     javaEbean
   )
 
-  val main = play.Project(appName, appVersion, appDependencies).settings(
-    // Add your own project settings here      
+  val main = play.Project(appName, appVersion, appDependencies).settings(jacoco.settings:_*).settings(
+    jacoco.reportFormats in jacoco.Config := Seq(XMLReport())
   )
-
 }

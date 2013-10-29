@@ -8,3 +8,5 @@ resolvers += "Typesafe repository" at "http://repo.typesafe.com/typesafe/release
 addSbtPlugin("play" % "sbt-plugin" % "2.1.3")
 
 addSbtPlugin("info.schleichardt" % "sbt-sonar" % "0.2.0-SNAPSHOT")
+
+addSbtPlugin("de.johoop" % "jacoco4sbt" % "1.2.4")
