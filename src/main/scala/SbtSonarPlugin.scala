@@ -37,7 +37,8 @@ object SbtSonarPlugin extends Plugin {
    */
   private def hackForWrongSurefireTestResultNames(targetDir: File, p: Map[String, String]): Map[String, String] = {
     val guessedTestReportsFolder = targetDir / "test-reports"
-    if (guessedTestReportsFolder.exists && !p.contains("sonar.surefire.reportsPath")) {
+    val keyForXunitResultPath = "sonar.junit.reportsPath"
+    if (guessedTestReportsFolder.exists && !p.contains(keyForXunitResultPath)) {
       val surefireTestReportsFolder = targetDir / "test-reports-sonar-copy"
       IO.copyDirectory(guessedTestReportsFolder, surefireTestReportsFolder, true)
       IO.listFiles(surefireTestReportsFolder).filter(_.isFile) foreach {
@@ -47,7 +48,7 @@ object SbtSonarPlugin extends Plugin {
             testReportFile.renameTo(new File(testReportFile.getParentFile, Prefix + testReportFile.getName))
           }
       }
-      Map("sonar.surefire.reportsPath" -> filePathsToString(Seq(surefireTestReportsFolder)))
+      Map(keyForXunitResultPath -> filePathsToString(Seq(surefireTestReportsFolder)))
     } else {
       Map()
     }
