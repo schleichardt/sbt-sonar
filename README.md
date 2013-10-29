@@ -21,8 +21,10 @@ addSbtPlugin("info.schleichardt" % "sbt-sonar" % "0.1.0-SNAPSHOT")
 Run sonar: 
 
 ```bash
-sbt gen-sonar-prop && cd target && sonar-runner
+sbt test gen-sonar-prop && cd target && sonar-runner
 ```
+
+Use the geb-sonar-prop task after the testing tasks, since the configuration checks for existing folders.
 
 ## Customization
 
