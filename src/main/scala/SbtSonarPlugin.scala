@@ -12,7 +12,7 @@ object SbtSonarPlugin extends Plugin {
 
   private def filePathsToString(files: Seq[File]) = files.filter(_.exists).map(_.getAbsolutePath).toSet.mkString(",")
 
-  override lazy val settings = Seq(generateSonarPropertiesFile <<= (sonarProperties, target) map { (p, targetDir) =>
+  lazy val sonarSettings = Seq(generateSonarPropertiesFile <<= (sonarProperties, target) map { (p, targetDir) =>
     val resultingMap = p ++ hackForWrongSurefireTestResultNames(targetDir, p)
     val propertiesAsString = resultingMap.toSeq.map { case (k, v) => "%s=%s".format(k, v) }.mkString("\n")
     val propertiesFile = targetDir / "sonar-project.properties"

@@ -15,7 +15,21 @@ Add to project/plugins.sbt:
 //release versions will be pushed to Maven Central
 resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 
-addSbtPlugin("info.schleichardt" % "sbt-sonar" % "0.1.0-SNAPSHOT")
+addSbtPlugin("info.schleichardt" % "sbt-sonar" % "TODO")
+```
+
+Add to build.sbt (project/Build.scala see beyond):
+
+```scala
+sonarSettings
+```
+
+OR project/Build.scala:
+
+```scala
+import info.schleichardt.sbt.sonar.SbtSonarPlugin._
+
+val main = project(...).settings(sonarSettings:_*)
 ```
 
 Run sonar: 

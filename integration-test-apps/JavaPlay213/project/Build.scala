@@ -20,5 +20,5 @@ object ApplicationBuild extends Build {
 
   val main = play.Project(appName, appVersion, appDependencies).settings(jacoco.settings:_*).settings(
     jacoco.reportFormats in jacoco.Config := Seq(XMLReport())
-  )
+  ).settings(sonarSettings:_*)
 }
