@@ -38,7 +38,7 @@ Run sonar:
 sbt test gen-sonar-prop && cd target && sonar-runner
 ```
 
-Use the geb-sonar-prop task after the testing tasks, since the configuration checks for existing folders.
+Use the gen-sonar-prop task after the testing tasks, since the configuration checks for existing folders.
 
 ## Customization
 
@@ -58,5 +58,7 @@ sonarProperties ~= { old => old ++
 Map("sonar.projectName" -> "override-name", "new.key" -> "new.value") }
 ```
 
+## Other Stuff
 
+* Do not use it with Play 2.1.3, Play has problems to generate correct test reports.
 

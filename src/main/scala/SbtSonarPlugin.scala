@@ -12,12 +12,12 @@ object SbtSonarPlugin extends Plugin {
 
   private def filePathsToString(files: Seq[File]) = files.filter(_.exists).map(_.getAbsolutePath).toSet.mkString(",")
 
-  lazy val sonarSettings = Seq(generateSonarPropertiesFile <<= (sonarProperties, target) map { (p, targetDir) =>
-    val resultingMap = p ++ hackForWrongSurefireTestResultNames(targetDir, p)
+  lazy val sonarSettings = Seq(generateSonarPropertiesFile <<= (sonarProperties, target, crossTarget) map { (p, targetDir, crossDir) =>
+    val resultingMap = p ++ hackForWrongSurefireTestResultNames(targetDir, p) ++ hackForJacocoReports(crossDir, p)
     val propertiesAsString = resultingMap.toSeq.map { case (k, v) => "%s=%s".format(k, v) }.mkString("\n")
     val propertiesFile = targetDir / "sonar-project.properties"
     IO.write(propertiesFile, propertiesAsString)
-  }, sonarProperties <<= (version, organization, name, unmanagedSourceDirectories in Compile, unmanagedSourceDirectories in Test, classDirectory in Test, target) { (v, org, n, sourceDirs, testDirs, classDir, targetDir) =>
+  }, sonarProperties <<= (version, organization, name, unmanagedSourceDirectories in Compile, unmanagedSourceDirectories in Test, classDirectory in Compile, target) { (v, org, n, sourceDirs, testDirs, classDir, targetDir) =>
     Map(
       "sonar.host.url" -> "http://localhost:9000",
       "sonar.projectKey" -> "%s:%s".format(org, n),
@@ -31,6 +31,19 @@ object SbtSonarPlugin extends Plugin {
     )
   }
   )
+
+  private def hackForJacocoReports(crossDir: File, p: Map[String, String]): Map[String, String] = {
+    val keyForJacocoReportsPath = "sonar.jacoco.reportPath"
+    val keyForCoveragePlugin = "sonar.java.coveragePlugin"
+    val jacocoReportPathDir = crossDir / "jacoco"
+
+    val hasAlreadyCoverageSettings = p.contains(keyForJacocoReportsPath) || p.contains(keyForCoveragePlugin)
+    if (jacocoReportPathDir.exists && !hasAlreadyCoverageSettings) {
+      Map("sonar.java.coveragePlugin" -> "jacoco", "sonar.jacoco.reportPath" -> filePathsToString(Seq(jacocoReportPathDir / "jacoco.exec")))
+    } else {
+      Map.empty
+    }
+  }
 
   /**
    * Play hack, since surefire only accepts tests if they start with TEST-

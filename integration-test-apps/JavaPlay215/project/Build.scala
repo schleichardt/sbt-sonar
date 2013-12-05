@@ -8,7 +8,7 @@ import info.schleichardt.sbt.sonar.SbtSonarPlugin._
 
 object ApplicationBuild extends Build {
 
-  val appName         = "JavaPlay213"
+  val appName         = "JavaPlay215"
   val appVersion      = "1.0-SNAPSHOT"
 
   val appDependencies = Seq(
