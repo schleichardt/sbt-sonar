@@ -2,6 +2,7 @@
 *.log
 .*
 !/.gitignore
+*.iml
 
 # sbt specific
 dist/*
