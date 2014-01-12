@@ -14,7 +14,7 @@ object SbtSonarPlugin extends Plugin {
   private def filePathsToString(files: Seq[File]) = files.filter(_.exists).map(_.getAbsolutePath).toSet.mkString(",")
 
   lazy val sonarSettings = Seq(generateSonarPropertiesFile <<= (sonarProperties, target, crossTarget) map { (p, targetDir, crossDir) =>
-    val resultingMap = p ++ hackForWrongSurefireTestResultNames(targetDir, p) ++ hackForJacocoReports(crossDir, p)
+    val resultingMap = p ++ hackForWrongSurefireTestResultNames(targetDir, p) ++ hackForJacocoReports(targetDir, p)
     val propertiesAsString = resultingMap.toSeq.map { case (k, v) => "%s=%s".format(k, v) }.mkString("\n")
     val propertiesFile = targetDir / "sonar-project.properties"
     IO.write(propertiesFile, propertiesAsString)
@@ -35,10 +35,10 @@ object SbtSonarPlugin extends Plugin {
   }
   )
 
-  private def hackForJacocoReports(crossDir: File, p: Map[String, String]): Map[String, String] = {
+  private def hackForJacocoReports(targetDir: File, p: Map[String, String]): Map[String, String] = {
     val keyForJacocoReportsPath = "sonar.jacoco.reportPath"
     val keyForCoveragePlugin = "sonar.java.coveragePlugin"
-    val jacocoReportPathDir = crossDir / "jacoco"
+    val jacocoReportPathDir = targetDir / "jacoco"
 
     val hasAlreadyCoverageSettings = p.contains(keyForJacocoReportsPath) || p.contains(keyForCoveragePlugin)
     if (jacocoReportPathDir.exists && !hasAlreadyCoverageSettings) {
