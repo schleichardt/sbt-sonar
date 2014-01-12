@@ -5,6 +5,7 @@ import Keys._
 import scala.Predef._
 
 object SbtSonarPlugin extends Plugin {
+  val generateSonarReport = TaskKey[Unit]("sonar", "Generates sonar property files.")
 
   val generateSonarPropertiesFile = TaskKey[Unit]("gen-sonar-prop", "Generates sonar property files.")
 
@@ -29,6 +30,8 @@ object SbtSonarPlugin extends Plugin {
       "sonar.sourceEncoding" -> "UTF-8",
       "sonar.sources" -> filePathsToString(sourceDirs)
     )
+  }, generateSonarReport <<= (sonarProperties, target, generateSonarPropertiesFile) map { (sP, ta, unused) =>
+    org.sonar.runner.Main.main(Array[String]("-D", "project.settings=" + (ta / "sonar-project.properties").getCanonicalPath))
   }
   )
 

@@ -22,6 +22,8 @@ scalacOptions ++= List(
   "-Xlint"
 )
 
+libraryDependencies += "org.codehaus.sonar.runner" % "sonar-runner-dist" % "2.3"
+
 scalariformSettings
 
 CrossBuilding.scriptedSettings

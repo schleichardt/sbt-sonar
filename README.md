@@ -35,7 +35,7 @@ val main = project(...).settings(sonarSettings:_*)
 Run sonar: 
 
 ```bash
-sbt test gen-sonar-prop && cd target && sonar-runner
+sbt test sonar
 ```
 
 Use the gen-sonar-prop task after the testing tasks, since the configuration checks for existing folders.
